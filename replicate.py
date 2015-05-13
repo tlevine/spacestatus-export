@@ -18,9 +18,29 @@ def get_hackerspace(date, name):
 def main():
     import sys, csv
     today = datetime.date.today()
-    for hackerspace in get_directory(today).json().get('rows', []):
-        for reading in get_hackerspace(today, today):
-            pass
+
+    writer = csv.writer(sys.stdout)
+    writer.writerow(('hackerspace', 'timestamp', 'open'))
+
+    directory_response = get_directory(today)
+    if not directory_response.ok:
+        sys.stderr.write('Error downloading directory\n')
+        sys.exit(1)
+
+    for hackerspace in directory_response.json().get('rows', []):
+        hackerspace_name = hackerspace['value']['name']
+        hackerspace_response = get_hackerspace(today, hackerspace_name)
+        if not directory_response.ok:
+            sys.stderr.write('Error downloading hackerspace\n')
+            sys.exit(2)
+
+        for reading in hackerspace_response.json().get('rows', []):
+            row = (
+                hackerspace_name,
+                reading['value']['lastchange'],
+                str(reading['value']['open']).upper(),
+            )
+            writer.writerow(row)
 
 if __name__ == '__main__':
     main()
