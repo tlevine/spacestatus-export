@@ -1,4 +1,4 @@
-from setuptools import setup, find_packages
+from setuptools import setup
 
 setup(
     name = 'spacestatus-export',
@@ -7,7 +7,7 @@ setup(
     author = 'Thomas Levine',
     author_email = '_@thomaslevine.com',
     url = 'http://dada.pink/spacestatus-export',
-    entry_points = {'console_scripts': ['spacestatus-export = spacestatus:cli']},
+    entry_points = {'console_scripts': ['spacestatus-export = spacestatus:main']},
     license = 'AGPL',
     py_modules = ['spacestatus'],
     install_requires = [
