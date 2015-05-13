@@ -1,6 +1,8 @@
+import datetime
+
 import requests, vlermv
 
-DIR = '~/.spacestatus'
+DIR = '~/.spacestatus-export'
 
 @vlermv.cache(DIR, 'directory')
 def get_directory(date):
@@ -14,10 +16,10 @@ def get_hackerspace(date, name):
     return requests.get(url % (name, dt))
 
 def main():
-    import sys, csv, datetime
+    import sys, csv
     today = datetime.date.today()
-    for hackerspace in get_directory(today):
-        for reading in get_hackerspace(hackerspace, today):
+    for hackerspace in get_directory(today).json().get('rows', []):
+        for reading in get_hackerspace(today, today):
             pass
 
 if __name__ == '__main__':
